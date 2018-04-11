@@ -10,7 +10,7 @@ This is a sample node.js image upload server that takes uploads from [ShareX](ht
 * `cd` into this repo
 * run `npm install` to install all dependencies
 * create a `uploads` folder in the root directory
-* start the server via `node start server.js`
+* start the server via `node server.js`
 * create a file called `config.json` in the root directory and copy paste and modify the following structure:
 ```
 {

@@ -10,19 +10,13 @@ const app = express();
 app.use(fileUpload());
 
 app.post('/upload', function (req, res) {
-    console.log(req);
-    /*
     if(req.header("api_key")!==config.api_key){
         return res.sendStatus(403);
     }
-    */
     if (!req.files)
         return res.status(400).send('No files were uploaded.');
-    //TODO: cycle through all files, make it throw an error that doesn't kill the whole application
-
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     let sampleFile = req.files.sampleFile;
-    console.log(sampleFile);
     let fileExtension  = getExtension(sampleFile.name)
     let filename = sh.generate()+"."+fileExtension;
     console.log(filename);
@@ -31,19 +25,12 @@ app.post('/upload', function (req, res) {
         if (err)
             return res.status(500).send(err);
 
-        res.send(config.url + filename);
+        res.send(req.get('host')+"/"+filename);
     });
 });
 
-//TODO: create proper index
-
-
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/', function (req, res) {
-    return res.send('Nothing to see here');
 });
 
 app.get('/:filename', function (req, res) {
@@ -58,7 +45,6 @@ app.get('/:filename', function (req, res) {
 });
 app.listen(config.port);
 console.log("Server is running!")
-
 
 function getExtension(filename) {
     var ext = path.extname(filename||'').split('.');

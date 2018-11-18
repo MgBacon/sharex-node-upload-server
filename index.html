@@ -1,10 +1,31 @@
 <html>
-
+<script>
+const sendRequest=function(){
+const Http = new XMLHttpRequest();
+var formData = new FormData();
+formData.append("sampleFile", document.getElementById("sampleFile").files[0]);        
+Http.open("POST", '/upload', true);
+Http.setRequestHeader("api_key", document.getElementById("apikey").value);
+Http.onreadystatechange = function() {
+    if(Http.readyState == 4){
+        if(Http.status == 200) {
+            var str=Http.responseText
+            var last = str.substring(str.lastIndexOf("/") + 1, str.length);
+            document.getElementById("url").innerHTML='<img src="\/'+last+'">';
+        }else{
+            document.getElementById("url").innerHTML=Http.status+": "+Http.statusText;
+        }
+    }
+}
+Http.send(formData);
+}
+</script>
 <body>
-    <form ref='uploadForm' id='uploadForm' action='/upload' method='post' encType="multipart/form-data">
-        <input type="file" name="sampleFile" />
-        <input type='submit' value='Upload!' /> </form>
-        
+    <form encType="multipart/form-data"></form>
+        <input type="file" id="sampleFile" required/>
+        <br>Apikey <input type="password" id="apikey" required/>
+        <input type='button' value='Upload!'onclick="sendRequest();" />
+    </form>
+    <div id="url"></div>    
 </body>
-
 </html>
